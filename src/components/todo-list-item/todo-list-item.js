@@ -6,19 +6,19 @@ export default class TodoListItem extends Component {
 
 
     state = {
-      text: this.props.label
+      label: ''
     };
 
-    onLabelChange = (e) => {
+    changeLabel = (e) => {
         this.setState({
-            text: e.target.value
+            label: e.target.value
         });
     };
 
-    onSubmitChange = (e) => {
+
+    editSubmit = (e) => {
         e.preventDefault();
-        this.props.onEdit(this.state.text);
-        console.log(this.state.text)
+        this.props.onChangeTask(this.state.label);
     };
 
     render() {
@@ -26,21 +26,7 @@ export default class TodoListItem extends Component {
             label, onDeleted,
             onToggleImportant, onToggleDone,
             done, important,
-            onEdit, isEdit
-        } = this.props;
-
-
-        const editInput =
-            <form onSubmit={ this.onSubmitChange }>
-                <input type="text"
-                       className='form-control edit-input'
-                       onChange={ this.onLabelChange }
-                />
-            </form>;
-        const taskText = <span className='todo-list-item-label'
-                               onClick={ onToggleDone }>
-                               { label }
-                        </span>;
+            onEdit, isEdit } = this.props;
 
 
         let classNames = 'todo-list-item';
@@ -50,10 +36,20 @@ export default class TodoListItem extends Component {
         if(important) {
             classNames += ' important'
         }
+        const isEditBlock = <form onSubmit={ this.editSubmit }>
+                                <input type="text"
+                                       onChange={ this.changeLabel }
+                                        ref='inputChange'
+                                />
+                            </form>;
+        const isLabelBlock = <span className='todo-list-item-label'
+                                   onClick={ onToggleDone }>
+                                   { label }
+                            </span>;
+
         return (
             <div className={ classNames }>
-                { isEdit ? editInput : taskText}
-
+                { isEdit ? isEditBlock : isLabelBlock }
             <div className="buttons-wrapper">
                 <button type='button'
                         className='btn btn-outline-danger btn-sm'

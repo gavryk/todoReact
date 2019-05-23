@@ -130,9 +130,28 @@ export default class App extends Component {
 
     onEdit = (id) => {
         this.setState(({ todoData }) => {
-           return {
-               todoData: this.toggleProperty(todoData, id, 'isEdit'),
-           }
+            return {
+                todoData: this.toggleProperty(todoData, id, 'isEdit')
+            }
+        });
+    };
+
+    onChangeTask = (text, id) => {
+        this.setState(({ todoData }) => {
+            const idx = todoData.findIndex((el) => el.id === id);
+
+            const newItem = this.createTodoItem(text);
+
+            const newArr = [
+                ...todoData.slice(0, idx),
+                newItem,
+                ...todoData.slice(idx + 1)
+            ];
+
+            return {
+                todoData: newArr
+            }
+
         });
     };
 
@@ -159,8 +178,10 @@ export default class App extends Component {
                               onToggleImportant={ this.onToggleImportant }
                               onToggleDone={ this.onToggleDone }
                               onEdit={ this.onEdit }
+                              onChangeTask={ this.onChangeTask }
                     />
-                    <ItemAddForm onItemAdded={ this.addItem }/>
+                    <ItemAddForm onItemAdded={ this.addItem }
+                    />
                 </div>
             </div>
         )
